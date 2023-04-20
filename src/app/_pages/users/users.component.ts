@@ -10,6 +10,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { selectAllUsers, User, UsersActions } from '@app/_state/users/users-store';
 import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -36,17 +37,13 @@ import { select, Store } from '@ngrx/store';
 })
 export class UsersComponent implements OnInit{
 
-  columnsToDisplay = ['firstName', 'lastName', 'maidenName', 'age',"gender","email","phone","birthDate"];
+  columnsToDisplay = ['action', 'firstName', 'lastName', 'maidenName', 'age',"gender","email","phone","birthDate"];
   expandedElement: User | null = null;
   userForm!:FormGroup;
   saveProcess=false; //for spinner
-  userList: User[] | [] = [];
+  userList$: Observable<User[]> = this.store.pipe(select(selectAllUsers));
 
-  constructor(private fb:FormBuilder, private store: Store){
-    this.store.pipe(select(selectAllUsers)).subscribe((users: User[]) => {
-      this.userList = users;
-    });
-  }
+  constructor(private fb:FormBuilder, private store: Store){}
 
   ngOnInit(): void {
     this.store.dispatch(UsersActions.getUsersList());
