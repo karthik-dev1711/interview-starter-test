@@ -10,6 +10,9 @@ import { AppComponent } from "@app/app.component";
 import { AppRoutes } from "@app/app-router";
 import { UsersReducer } from "@state/users/users-store";
 import { UsersEffects } from "@app/_state/users/users-effects";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { ApiLogInterceptor } from "@app/_shared/http-interceptors";
+
 
 bootstrapApplication(AppComponent, {
     providers: [
@@ -17,6 +20,11 @@ bootstrapApplication(AppComponent, {
         provideStore(),
         provideState(UsersReducer),
         provideEffects(UsersEffects),
-        importProvidersFrom(BrowserAnimationsModule),
+        importProvidersFrom(BrowserAnimationsModule, HttpClientModule),
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ApiLogInterceptor,
+            multi: true
+        }
     ]
 });

@@ -1,1 +1,170 @@
-<p>users works!</p>
+<div class="user-header">
+    User Management
+</div>
+
+<div class="table-wrap">
+
+    <table
+    mat-table
+    [dataSource]="userList"
+    multiTemplateDataRows
+    class="mat-elevation-z8"
+    >
+
+    <ng-container
+    matColumnDef="{{ column }}"
+    *ngFor="let column of columnsToDisplay"
+  >
+    <th class="table-header" mat-header-cell *matHeaderCellDef>
+      {{ column }}
+    </th>
+    <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="expandedDetail">
+    <td
+      mat-cell
+      *matCellDef="let element"
+      [attr.colspan]="columnsToDisplay.length"
+    >
+    <div
+          class="user-element-detail"
+          [@detailExpand]="
+            element == expandedElement ? 'expanded' : 'collapsed'
+          "
+        >
+
+        <div class="form-container">
+            <form [formGroup]="userForm">
+                <div class="form-wrap">
+                    <mat-form-field
+                        class="form-field-container"
+                        appearance="outline"
+                    >
+                        <mat-label class="form-lable">First name: </mat-label>
+                        <input
+                        formControlName="firstName"
+                        class="form-input"
+                        [value]="element.firstName"
+                        matInput
+                        />
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Last name: </mat-label>
+                        <input
+                        matInput
+                        formControlName="lastName"
+                        [value]="element.lastName"
+                        />
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mainden name: </mat-label>
+                        <input
+                        matInput
+                        formControlName="maidenName"
+                        [value]="element.maidenName"
+                        />
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Age: </mat-label>
+                        <input
+                        matInput
+                        formControlName="age"
+                        [value]="element.age"
+                        type="number"
+                        />
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Gender: </mat-label>
+                        <input
+                        matInput
+                        formControlName="gender"
+                        [value]="element.gender"
+                        />
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email: </mat-label>
+                        <input
+                        matInput
+                        formControlName="email"
+                        [value]="element.email"
+                        />
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Phone: </mat-label>
+                        <input
+                        matInput
+                        formControlName="phone"
+                        [value]="element.phone"
+                        />
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Birth Date: </mat-label>
+                        <input
+                        matInput
+                        formControlName="birthDate"
+                        [value]="element.birthDate"
+                        />
+                    </mat-form-field>
+    
+                    <div class="button-wrap">
+                        <button
+                        mat-button
+                        mat-raised-button
+                        color="primary"
+                        [disabled]="saveProcess"
+                        (click)="saveChange(element.id)"
+                        >
+                        <ng-container *ngIf="saveProcess"
+                            ><mat-icon><mat-spinner diameter="20"></mat-spinner></mat-icon
+                        ></ng-container>
+                        Save
+                        </button>
+                        <button
+                        mat-flat-button
+                        color="accent"
+                        (click)="cancleChange()"
+                        >
+                        cancel
+                        </button>
+                    </div>
+                    
+                </div>
+            </form>
+
+        </div>
+    
+    
+    </div>
+
+    </td>
+</ng-container>
+
+<tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+<tr
+mat-row
+*matRowDef="let element; columns: columnsToDisplay"
+class="user-element-row"
+[class.user-expanded-row]="expandedElement === element"
+(click)="
+  expandedElement = expandedElement === element ? null : element;
+  onExpande(element)
+"
+></tr>
+
+<tr
+mat-row
+*matRowDef="let row; columns: ['expandedDetail']"
+      class="user-detail-row"
+>
+</tr>
+
+    </table>
+</div>
